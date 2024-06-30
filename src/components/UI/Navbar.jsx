@@ -1,35 +1,38 @@
 import logo from '../../assets/img/logo.png';
-const Navbar = () => {
+import egar from '../../assets/img/egar.jpg';
+import {Link} from "react-router-dom";
+import UserService from "../../services/UserService.js";
+
+const Navbar = ({auth}) => {
+
     return (
         <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
             <div className="container-fluid">
                 <div className="collapse navbar-collapse" id="navbarScroll">
                     <div className='container'>
-                        <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll d-flex align-items-center">
-                            <li className="nav-item text-white">
-                                <a className="nav-link active" href="/public">
-                                    <img className='w-75' src={logo} alt="Издательство"/>
-                                </a>
-                            </li>
-                            <li className="nav-item text-white">
-                                <a className="nav-link active" href="/orders">Заказы</a>
-                            </li>
-                            <li className="nav-item text-white">
-                                <a className="nav-link active" href="/books/types">Типы книг</a>
-                            </li>
-                            <li className="nav-item text-white">
-                                <a className="nav-link active" href="/books/formats">Форматы книг</a>
-                            </li>
-                            <li className="nav-item text-white">
-                                <a className="nav-link active" href="/customers">Заказчики</a>
-                            </li>
-                            <li className="nav-item text-white">
-                                <a className="nav-link active" href="/sign-in">Войти</a>
-                            </li>
-                            <li className="nav-item text-white">
-                                <a className="nav-link active" href="/sign-up">Зарегистрироваться</a>
-                            </li>
-                        </ul>
+                        <div className="row d-flex">
+                            <div className="col-md-8">
+                                <ul className="navbar-nav d-flex align-items-center justify-content-between">
+                                    <Link className="link" to="/"><img className='w-75' src={logo} alt="Издательство"/></Link>
+                                    {auth && <Link className="link" to="/orders">Заказы</Link>}
+                                    {auth && <Link className="link" to="/tasks">Задачи</Link>}
+                                    {auth && <Link className="link" to="/customers">Заказчики</Link>}
+                                    {auth && <Link className="link" to="/books/types">Типы книг</Link>}
+                                    {auth && <Link className="link" to="/books/formats">Форматы книг</Link>}
+                                    {!auth &&
+                                        <div>
+                                            <Link className="link-auth p-2" to="/sign-in">Войти</Link>
+                                            <Link className="link-auth" to="/sign-up">Зарегистрироваться</Link>
+                                        </div>}
+                                    {auth &&
+                                        <Link className="link-auth" onClick={UserService.logout} to="/">Выйти</Link>}
+                                </ul>
+                            </div>
+                            <div className="col-md-4 container d-flex justify-content-end align-items-center p-0 m-0">
+                                <span className='nav-span'>© Developed by Fafurin F.D. in 2024 special for</span>
+                                <img className='w-25' src={egar} alt="EGAR Technology"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
