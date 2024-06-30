@@ -3,8 +3,11 @@ import {useNavigate, useParams} from "react-router-dom";
 import OrderService from "../../services/OrderService.js";
 import BookTypeService from "../../services/BookTypeService.js";
 import BookFormatService from "../../services/BookFormatService.js";
+import SmallLiteButton from "../UI/buttons/SmallLiteButton.jsx";
+import InfoButton from "../UI/buttons/InfoButton.jsx";
+import BigInfoButton from "../UI/buttons/BigInfoButton.jsx";
 
-const OrderComponent = () => {
+const OrderCreateComponent = () => {
 
     const [bookTypes, setBookTypes] = useState([]);
     const [bookFormats, setBookFormats] = useState([]);
@@ -15,6 +18,7 @@ const OrderComponent = () => {
 
     const [title, setTitle] = useState("");
     const [authors, setAuthors] = useState("");
+    const [files, setFiles] = useState("");
     const [typeId, setTypeId] = useState("");
     const [formatId, setFormatId] = useState("");
 
@@ -52,14 +56,9 @@ const OrderComponent = () => {
     useEffect(() => {
         getAllBookTypes();
         getAllBookFormats();
-        OrderService.getOrder(id).then(response => {
-            setName(response.data.name);
-            setEmail(response.data.email);
-            setPhone(response.data.phone);
-        }).catch(errors => console.error(errors))
-    }, [id]);
+    }, []);
 
-    const saveOrUpdateOrder = (e) => {
+    const saveOrder = (e) => {
         e.preventDefault();
 
         if (validateForm()) {
@@ -126,11 +125,20 @@ const OrderComponent = () => {
         return valid;
     }
 
+    const handleFiles = (e) => {
+        const files = e.target.files;
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            formData.append('file[' + i + ']', file);
+        }
+    }
+
     return (
         <div className='container'>
             <div className="row">
-                <div className="col-md-8 mx-auto">
-                    <div className="card text-white bg-dark m-3">
+                <div className="col-md-10 mx-auto">
+                    <div className="card text-white bg-dark mt-5 p-1">
                         <h2 className='text-center m-3'>Новый заказ</h2>
                         <div className="card-body">
                             <form>
@@ -168,7 +176,6 @@ const OrderComponent = () => {
                                             <select className="form-select" aria-label="Выберете тип книги"
                                                     onChange={(e) => setTypeId(e.target.value)}>
                                                 {bookTypes.map(bookType => (
-                                                    // eslint-disable-next-line react/jsx-key
                                                     <option value={bookType.id}>{bookType.title}</option>
                                                 ))}
                                             </select>
@@ -179,11 +186,19 @@ const OrderComponent = () => {
                                             <select className="form-select" aria-label="Выберете формат книги"
                                                     onChange={(e) => setFormatId(e.target.value)}>
                                                 {bookFormats.map(bookFormat => (
-                                                    // eslint-disable-next-line react/jsx-key
                                                     <option value={bookFormat.id}>{bookFormat.title}</option>
                                                 ))}
                                             </select>
                                         </div>
+
+                                        <div className="form-group mb-2">
+                                            <label className='form-label'>Файлы</label>
+                                            <input type="file" accept="multipart/form-data" multiple
+                                                   className='form-control'
+                                                   onChange={handleFiles}
+                                            />
+                                        </div>
+
                                     </div>
                                     <div className="col-md-5">
                                         <h4 className='text-center m-3'>Данные заказчика</h4>
@@ -231,10 +246,9 @@ const OrderComponent = () => {
                                                    placeholder='Номер заказа'
                                                    name='number'
                                                    value={number}
-                                                   className={`form-control ${errors.number ? 'is-invalid' : ''}`}
+                                                   className='form-control'
                                                    onChange={(e) => setNumber(e.target.value)}
                                             />
-                                            {errors.number && <div className='invalid-feedback'>{errors.number}</div>}
                                         </div>
 
                                         <div className="form-group mb-2">
@@ -251,9 +265,10 @@ const OrderComponent = () => {
                                     <div className="col-md-5">
                                         <div className="form-group mb-2">
                                     <textarea name='comment'
+                                              className='p-3 w-100 rounded'
                                               value={comment}
                                               placeholder='Комментарии к заказу'
-                                              cols="38" rows="5"
+                                              rows="5"
                                               onChange={(e) => setComment(e.target.value)}/>
                                         </div>
                                     </div>
@@ -261,11 +276,8 @@ const OrderComponent = () => {
 
                                 </div>
                                 <div className='text-center'>
-                                    <button className='btn btn-outline-light' onClick={saveOrUpdateOrder}>
-                                        Создать
-                                    </button>
+                                    <BigInfoButton title="Создать" onClick={saveOrder}/>
                                 </div>
-
                             </form>
                         </div>
                     </div>
@@ -275,4 +287,4 @@ const OrderComponent = () => {
     );
 };
 
-export default OrderComponent;
+export default OrderCreateComponent;

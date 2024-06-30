@@ -1,6 +1,7 @@
 import {useState} from "react";
-import {signIn} from "../../services/UserService.js";
 import {useNavigate} from "react-router-dom";
+import UserService from "../../services/UserService.js";
+import SmallLiteButton from "../UI/buttons/SmallLiteButton.jsx";
 
 const SignInComponent = () => {
 
@@ -16,13 +17,13 @@ const SignInComponent = () => {
     const navigator = useNavigate();
 
 
-    const saveUser = (e) => {
+    const signIn = (e) => {
         e.preventDefault();
 
         if (validateForm()) {
             const user = {username, password};
 
-            signIn(user)
+            UserService.signIn(user)
                 .then(response => {
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -59,10 +60,10 @@ const SignInComponent = () => {
 
         <div className='container'>
             <div className="row">
-                <div className="col-md-6 mx-auto">
-                    <h2 className='text-center m-3'>Sign In</h2>
+                <div className="col-md-4 mx-auto">
+                    <h2 className='text-center m-3'>Войти</h2>
                     <div className="card text-white bg-dark mb-3">
-                        <div className="card-body">
+                        <div className="card-body text-center">
                             <form>
                                 <div className="form-group mb-2">
                                     <label className='form-label'>Username</label>
@@ -70,7 +71,7 @@ const SignInComponent = () => {
                                            placeholder='Enter username'
                                            name='username'
                                            value={username}
-                                           className={`form-control ${errors.username ? 'is-invalid' : ''}`}
+                                           className={`form-control text-center ${errors.username ? 'is-invalid' : ''}`}
                                            onChange={(e) => setUsername(e.target.value)}
                                     />
                                     {errors.username && <div className='invalid-feedback'>{errors.username}</div>}
@@ -82,15 +83,12 @@ const SignInComponent = () => {
                                            placeholder='Enter password'
                                            name='password'
                                            value={password}
-                                           className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                                           className={`form-control text-center ${errors.password ? 'is-invalid' : ''}`}
                                            onChange={(e) => setPassword(e.target.value)}
                                     />
                                     {errors.password && <div className='invalid-feedback'>{errors.password}</div>}
                                 </div>
-
-                                <button className='btn btn-outline-light' onClick={saveUser}>
-                                    Sign In
-                                </button>
+                                <SmallLiteButton title="Войти" onClick={signIn}/>
                             </form>
                         </div>
                     </div>

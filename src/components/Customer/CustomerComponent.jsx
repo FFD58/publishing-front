@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import CustomerService from "../../services/CustomerService.js";
+import SmallLiteButton from "../../components/UI/buttons/SmallLiteButton.jsx";
+import Input from "../../components/UI/Input.jsx";
 
 const CustomerComponent = () => {
 
@@ -81,52 +83,53 @@ const CustomerComponent = () => {
         return valid;
     }
 
-    const getTitle = () => id ? "Изменить" : "Создать";
+    const getTitle = () => id ? "Изменить данные" : "Создать";
 
     return (
         <div className='container'>
             <div className="row">
-                <div className="col-md-6 mx-auto">
+                <div className="col-md-5 mx-auto mt-5">
                     <div className="card text-white bg-dark mb-3">
                         <h2 className='text-center m-3'>{getTitle()} заказчика</h2>
-                        <div className="card-body">
+                        <div className="card-body text-center">
                             <form>
                                 <div className="form-group mb-2">
                                     <label className='form-label'>ФИО</label>
-                                    <input type="text"
-                                           placeholder='Введите ФИО'
-                                           name='name'
-                                           value={name}
-                                           className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                                           onChange={(e) => setName(e.target.value)}
+                                    <Input
+                                        type="text"
+                                        value={name}
+                                        placeholder="Введите ФИО"
+                                        onChange={(e) => setName(e.target.value)}
+                                        style={errors.name ? 'is-invalid' : ''}
+
                                     />
                                     {errors.name && <div className='invalid-feedback'>{errors.name}</div>}
                                 </div>
                                 <div className="form-group mb-2">
                                     <label className='form-label'>Email</label>
-                                    <input type="email"
-                                           placeholder='Введите email'
-                                           name='email'
-                                           value={email}
-                                           className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                                           onChange={(e) => setEmail(e.target.value)}
+                                    <Input
+                                        type="email"
+                                        value={email}
+                                        placeholder="Введите email"
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        style={errors.email ? 'is-invalid' : ''}
+
                                     />
                                     {errors.email && <div className='invalid-feedback'>{errors.email}</div>}
                                 </div>
                                 <div className="form-group mb-2">
                                     <label className='form-label'>Телефон</label>
-                                    <input type="text"
-                                           placeholder='Введите номер телефона'
-                                           name='phone'
-                                           value={phone}
-                                           className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                                           onChange={(e) => setPhone(e.target.value)}
+                                    <Input
+                                        type="text"
+                                        value={phone}
+                                        placeholder="Введите номер телефона"
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        style={errors.phone ? 'is-invalid' : ''}
+
                                     />
                                     {errors.phone && <div className='invalid-feedback'>{errors.phone}</div>}
                                 </div>
-                                <button className='btn btn-outline-light' onClick={saveOrUpdateCustomer}>
-                                    {getTitle()}
-                                </button>
+                                <SmallLiteButton onClick={saveOrUpdateCustomer} title={getTitle()}/>
                             </form>
                         </div>
                     </div>

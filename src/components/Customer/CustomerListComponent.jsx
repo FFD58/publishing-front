@@ -1,6 +1,9 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import CustomerService from "../../services/CustomerService.js";
+import SmallInfoButton from "../../components/UI/buttons/SmallInfoButton.jsx";
+import SmallDangerButton from "../../components/UI/buttons/SmallDangerButton.jsx";
+import BigLiteButton from "../../components/UI/buttons/BigLiteButton.jsx";
 
 const CustomerListComponent = () => {
 
@@ -14,7 +17,7 @@ const CustomerListComponent = () => {
 
     const getAllCustomers = () => {
         CustomerService.listCustomers().then((response) => {
-            setCustomers(response.data)
+            setCustomers(response.data.length === 0 ? [] : response.data)
         }).catch(error => {
             console.error(error);
         })
@@ -36,10 +39,10 @@ const CustomerListComponent = () => {
     return (
         <div className='container'>
             <h2 className='text-center m-3'>Заказчики</h2>
-            <button className='btn btn-dark mb-3' onClick={addNewCustomer}>Новый заказчик</button>
-            <table className='table table-dark table-striped table-bordered'>
+            <BigLiteButton title="Новый заказчик" onClick={addNewCustomer}/>
+            <table className='table table-dark table-striped table-bordered text-center align-middle'>
                 <thead>
-                <tr className='text-center'>
+                <tr>
                     <th>Id</th>
                     <th>ФИО</th>
                     <th>Телефон</th>
@@ -49,22 +52,17 @@ const CustomerListComponent = () => {
                 </thead>
                 <tbody>
                 {
-                    // TODO: написать проверку на пустой массив customers
                     customers.map(customer =>
                         <tr key={customer.id}>
-                            <td className='text-center'>{customer.id}</td>
+                            <td>{customer.id}</td>
                             <td>{customer.name}</td>
                             <td>{customer.phone}</td>
                             <td>{customer.email}</td>
-                            <td className='text-center'>
-                                <button className='btn btn-outline-info'
-                                        onClick={() => updateCustomer(customer.id)}>Изменить
-                                </button>
+                            <td>
+                                <SmallInfoButton title="Изменить" onClick={() => updateCustomer(customer.id)}/>
                             </td>
-                            <td className='text-center'>
-                                <button className='btn btn-outline-danger'
-                                        onClick={() => removeCustomer(customer.id)}>Удалить
-                                </button>
+                            <td>
+                                <SmallDangerButton title="Удалить" onClick={() => removeCustomer(customer.id)}/>
                             </td>
                         </tr>
                     )
