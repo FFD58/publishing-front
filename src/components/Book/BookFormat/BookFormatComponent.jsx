@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import BookFormatService from "../../../services/BookFormatService.js";
+import Button from "../../UI/buttons/SmallLiteButton.jsx";
+import Input from "../../UI/Input.jsx";
 
 const BookFormatComponent = () => {
 
@@ -74,36 +76,36 @@ const BookFormatComponent = () => {
     return (
         <div className='container'>
             <div className="row">
-                <div className="col-md-6 mx-auto">
-                    <div className="card text-white bg-dark mb-3">
+                <div className="col-md-4 mx-auto">
+                    <div className="card text-white bg-dark mt-5">
                         <h2 className='text-center m-3'>{getTitle()} формат книжного издания</h2>
-                        <div className="card-body">
+                        <div className="card-body text-center">
                             <form>
                                 <div className="form-group mb-2">
                                     <label className='form-label'>Название</label>
-                                    <input type="text"
-                                           placeholder='Введите название'
-                                           name='title'
-                                           value={title}
-                                           className={`form-control ${errors.title ? 'is-invalid' : ''}`}
-                                           onChange={(e) => setTitle(e.target.value)}
+                                    <Input
+                                        type="text"
+                                        value={title}
+                                        placeholder="Введите название"
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        style={errors.title ? 'is-invalid' : ''}
+
                                     />
                                     {errors.title && <div className='invalid-feedback'>{errors.title}</div>}
                                 </div>
                                 <div className="form-group mb-2">
-                                    <label className='form-label'>Обозначение</label>
-                                    <input type="text"
-                                           placeholder='Введите обозначние'
-                                           name='designation'
-                                           value={designation}
-                                           className={`form-control ${errors.designation ? 'is-invalid' : ''}`}
-                                           onChange={(e) => setDesignation(e.target.value)}
+                                <label className='form-label'>Обозначение</label>
+                                    <Input
+                                        type="text"
+                                        value={designation}
+                                        placeholder="Введите обозначние"
+                                        onChange={(e) => setDesignation(e.target.value)}
+                                        style={errors.designation ? 'is-invalid' : ''}
+
                                     />
                                     {errors.designation && <div className='invalid-feedback'>{errors.designation}</div>}
                                 </div>
-                                <button className='btn btn-outline-light' onClick={saveOrUpdateBookFormat}>
-                                    {getTitle()}
-                                </button>
+                                <Button onClick={saveOrUpdateBookFormat} title={getTitle()}/>
                             </form>
                         </div>
                     </div>

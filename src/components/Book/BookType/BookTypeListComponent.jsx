@@ -1,6 +1,10 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import BookTypeService from "../../../services/BookTypeService.js";
+import SmallInfoButton from "../../UI/buttons/SmallInfoButton.jsx";
+import SmallDangerButton from "../../UI/buttons/SmallDangerButton.jsx";
+import BigLiteButton from "../../UI/buttons/BigLiteButton.jsx";
+import UserService from "../../../services/UserService.js";
 
 const BookTypeListComponent = () => {
 
@@ -14,7 +18,7 @@ const BookTypeListComponent = () => {
 
     const getAllBookTypes = () => {
         BookTypeService.listBookTypes().then((response) => {
-            setBookTypes(response.data)
+            setBookTypes(response.data.length === 0 ? [] : response.data);
         }).catch(error => {
             console.error(error);
         })
@@ -34,39 +38,38 @@ const BookTypeListComponent = () => {
     }
 
     return (
-        <div className='content container'>
-            <h2 className='text-center m-3'>Book Types</h2>
-            <button className='btn btn-dark mb-3' onClick={addNewBookType}>Новый тип</button>
-            <table className='table table-dark table-striped table-bordered'>
-                <thead>
-                <tr className='text-center'>
-                    <th>Id</th>
-                    <th>Название</th>
-                    <th colSpan="2">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    // TODO: написать проверку на пустой массив bookTypes
-                    bookTypes.map(bookType =>
-                        <tr key={bookType.id}>
-                            <td className='text-center'>{bookType.id}</td>
-                            <td>{bookType.title}</td>
-                            <td className='text-center'>
-                                <button className='btn btn-outline-info'
-                                        onClick={() => updateBookType(bookType.id)}>Изменить
-                                </button>
-                            </td>
-                            <td className='text-center'>
-                                <button className='btn btn-outline-danger'
-                                        onClick={() => removeBookType(bookType.id)}>Удалить
-                                </button>
-                            </td>
+        <div className='container'>
+            <div className="row">
+                <div className="col-md-8 m-auto">
+                    <h2 className='text-center m-3'>Типы книг</h2>
+                    {UserService.isAdmin() && <BigLiteButton title="Новый тип" onClick={addNewBookType}/>}
+                    <table className='table table-dark table-striped table-bordered text-center align-middle'>
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Название</th>
+                            {UserService.isAdmin() && <th colSpan="2">Действия</th>}
                         </tr>
-                    )
-                }
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                        {
+                            bookTypes.map(bookType =>
+                                <tr key={bookType.id}>
+                                    <td>{bookType.id}</td>
+                                    <td>{bookType.title}</td>
+                                    {UserService.isAdmin() && <td>
+                                        <SmallInfoButton title="Изменить" onClick={() => updateBookType(bookType.id)}/>
+                                    </td>}
+                                    {UserService.isAdmin() && <td>
+                                        <SmallDangerButton title="Удалить" onClick={() => removeBookType(bookType.id)}/>
+                                    </td>}
+                                </tr>
+                            )
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     )
 }

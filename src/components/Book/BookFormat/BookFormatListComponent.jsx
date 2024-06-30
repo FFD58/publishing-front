@@ -1,6 +1,10 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import BookFormatService from "../../../services/BookFormatService.js";
+import SmallDangerButton from "../../UI/buttons/SmallDangerButton.jsx";
+import SmallInfoButton from "../../UI/buttons/SmallInfoButton.jsx";
+import BigLiteButton from "../../UI/buttons/BigLiteButton.jsx";
+import UserService from "../../../services/UserService.js";
 
 const BookFormatListComponent = () => {
 
@@ -14,7 +18,7 @@ const BookFormatListComponent = () => {
 
     const getAllBookFormats = () => {
         BookFormatService.listBookFormats().then((response) => {
-            setBookFormats(response.data)
+            setBookFormats(response.data.length === 0 ? [] : response.data);
         }).catch(error => {
             console.error(error);
         })
@@ -35,40 +39,39 @@ const BookFormatListComponent = () => {
 
     return (
         <div className='container'>
-            <h2 className='text-center m-3'>Форматы книжных изданий</h2>
-            <button className='btn btn-dark mb-3' onClick={addNewBookFormat}>Новый формат</button>
-            <table className='table table-dark table-striped table-bordered'>
-                <thead>
-                <tr className='text-center'>
-                    <th>Id</th>
-                    <th>Название</th>
-                    <th>Обозначение</th>
-                    <th colSpan="2">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    // TODO: написать проверку на пустой массив bookFormats
-                    bookFormats.map(bookFormat =>
-                        <tr key={bookFormat.id}>
-                            <td className='text-center'>{bookFormat.id}</td>
-                            <td>{bookFormat.title}</td>
-                            <td>{bookFormat.designation}</td>
-                            <td className='text-center'>
-                                <button className='btn btn-outline-info'
-                                        onClick={() => updateBookFormat(bookFormat.id)}>Изменить
-                                </button>
-                            </td>
-                            <td className='text-center'>
-                                <button className='btn btn-outline-danger'
-                                        onClick={() => removeBookFormat(bookFormat.id)}>Удалить
-                                </button>
-                            </td>
+            <div className="row">
+                <div className="col-md-8 m-auto">
+                    <h2 className='text-center m-3'>Форматы книжных изданий</h2>
+                    {UserService.isAdmin() && <BigLiteButton title="Новый формат" onClick={addNewBookFormat}/>}
+                    <table className='table table-dark table-striped table-bordered text-center align-middle'>
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Название</th>
+                            <th>Обозначение</th>
+                            {UserService.isAdmin() && <th colSpan="2">Действия</th>}
                         </tr>
-                    )
-                }
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                        {
+                            bookFormats.map(bookFormat =>
+                                <tr key={bookFormat.id}>
+                                    <td>{bookFormat.id}</td>
+                                    <td>{bookFormat.title}</td>
+                                    <td>{bookFormat.designation}</td>
+                                    {UserService.isAdmin() && <td className='text-center'>
+                                        <SmallInfoButton title="Изменить" onClick={() => updateBookFormat(bookFormat.id)}/>
+                                    </td>}
+                                    {UserService.isAdmin() && <td className='text-center'>
+                                        <SmallDangerButton title="Удалить" onClick={() => removeBookFormat(bookFormat.id)}/>
+                                    </td>}
+                                </tr>
+                            )
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     )
 }

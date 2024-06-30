@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import CustomerService from "../../services/CustomerService.js";
-import SmallLiteButton from "../../components/UI/buttons/SmallLiteButton.jsx";
-import Input from "../../components/UI/Input.jsx";
+import SmallLiteButton from "../UI/buttons/SmallLiteButton.jsx";
+import Input from "../UI/Input.jsx";
 
 const CustomerComponent = () => {
 
