@@ -1,24 +1,24 @@
-import UserService from "../../services/UserService.js";
+import UserService from "../services/UserService.js";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import TaskService from "../../services/TaskService.js";
-import SmallLiteButton from "./buttons/SmallLiteButton.jsx";
-import Expire from "./Expire.jsx";
+import TaskService from "../services/TaskService.js";
+import SmallLiteButton from "./UI/buttons/SmallLiteButton.jsx";
+import Expire from "./UI/Expire.jsx";
 
 const MainComponent = () => {
 
     const [tasks, setTasks] = useState([]);
 
-    const [visible, setVisible] = useState(true);
-
     const navigator = useNavigate();
 
     useEffect(() => {
-        TaskService.getCurrentUserTasks().then((response) => {
-            setTasks(response.data.length === 0 ? [] : response.data);
-        }).catch(error => {
-            console.error(error);
-        })
+        if (UserService.isAuthenticated()) {
+            TaskService.getCurrentUserTasks().then((response) => {
+                setTasks(response.data.length === 0 ? [] : response.data);
+            }).catch(error => {
+                console.error(error);
+            })
+        }
     }, []);
 
     const viewTask = (id) => navigator(`/tasks/${id}`);
