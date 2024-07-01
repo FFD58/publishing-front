@@ -27,12 +27,14 @@ const TaskListComponent = () => {
     const updateTask = (id) => navigator(`/tasks/update/${id}`);
 
     const removeTask = (id) => {
-        TaskService.deleteTask(id)
-            .then(response => {
-                console.log(response.data.token);
-                getAllTasks();
-            })
-            .catch(errors => console.error(errors));
+        if (confirm("Вы уверены?")) {
+            TaskService.deleteTask(id)
+                .then(response => {
+                    console.log(response.data.token);
+                    getAllTasks();
+                })
+                .catch(errors => console.error(errors));
+        }
     }
 
     const viewTask = (id) => navigator(`/tasks/${id}`);

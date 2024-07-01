@@ -30,12 +30,14 @@ const OrderListComponent = () => {
     const updateOrder = (id) => navigator(`/orders/update/${id}`);
 
     const removeOrder = (id) => {
-        OrderService.deleteOrder(id)
-            .then(response => {
-                console.log(response.data);
-                getAllOrders();
-            })
-            .catch(errors => console.error(errors));
+        if (confirm("Вы уверены?")) {
+            OrderService.deleteOrder(id)
+                .then(response => {
+                    console.log(response.data);
+                    getAllOrders();
+                })
+                .catch(errors => console.error(errors));
+        }
     }
 
     const viewOrder = (id) => navigator(`/orders/view/${id}`);

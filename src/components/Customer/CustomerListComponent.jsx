@@ -30,12 +30,14 @@ const CustomerListComponent = () => {
     const updateCustomer = (id) => navigator(`/customers/update/${id}`);
 
     const removeCustomer = (id) => {
-        CustomerService.deleteCustomer(id)
-            .then(response => {
-                console.log(response.data);
-                getAllCustomers();
-            })
-            .catch(errors => console.error(errors));
+        if (confirm("Вы уверены?")) {
+            CustomerService.deleteCustomer(id)
+                .then(response => {
+                    console.log(response.data);
+                    getAllCustomers();
+                })
+                .catch(errors => console.error(errors));
+        }
     }
 
     return (

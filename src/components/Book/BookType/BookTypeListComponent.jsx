@@ -29,12 +29,14 @@ const BookTypeListComponent = () => {
     const updateBookType = (id) => navigator(`/books/types/update/${id}`);
 
     const removeBookType = (id) => {
-        BookTypeService.deleteBookType(id)
-            .then(response => {
-                console.log(response.data.token);
-                getAllBookTypes();
-            })
-            .catch(errors => console.error(errors));
+        if (confirm("Вы уверены?")) {
+            BookTypeService.deleteBookType(id)
+                .then(response => {
+                    console.log(response.data.token);
+                    getAllBookTypes();
+                })
+                .catch(errors => console.error(errors));
+        }
     }
 
     return (

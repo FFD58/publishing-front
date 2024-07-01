@@ -26,15 +26,17 @@ const BookFormatListComponent = () => {
 
     const addNewBookFormat = () => navigator('/books/formats/create');
 
-    const updateBookFormat = (id) =>navigator(`/books/formats/update/${id}`);
+    const updateBookFormat = (id) => navigator(`/books/formats/update/${id}`);
 
     const removeBookFormat = (id) => {
-        BookFormatService.deleteBookFormat(id)
-            .then(response => {
-                console.log(response.data);
-                getAllBookFormats();
-            })
-            .catch(errors => console.error(errors));
+        if (confirm("Вы уверены?")) {
+            BookFormatService.deleteBookFormat(id)
+                .then(response => {
+                    console.log(response.data);
+                    getAllBookFormats();
+                })
+                .catch(errors => console.error(errors));
+        }
     }
 
     return (
@@ -60,10 +62,12 @@ const BookFormatListComponent = () => {
                                     <td>{bookFormat.title}</td>
                                     <td>{bookFormat.designation}</td>
                                     {UserService.isAdmin() && <td className='text-center'>
-                                        <SmallInfoButton title="Изменить" onClick={() => updateBookFormat(bookFormat.id)}/>
+                                        <SmallInfoButton title="Изменить"
+                                                         onClick={() => updateBookFormat(bookFormat.id)}/>
                                     </td>}
                                     {UserService.isAdmin() && <td className='text-center'>
-                                        <SmallDangerButton title="Удалить" onClick={() => removeBookFormat(bookFormat.id)}/>
+                                        <SmallDangerButton title="Удалить"
+                                                           onClick={() => removeBookFormat(bookFormat.id)}/>
                                     </td>}
                                 </tr>
                             )

@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import TaskService from "../../../services/TaskService.js";
 import BigInfoButton from "../../UI/buttons/BigInfoButton.jsx";
+import UserService from "../../../services/UserService.js";
 
 const TaskViewComponent = () => {
 
@@ -139,9 +140,9 @@ const TaskViewComponent = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='text-center'>
+                            {UserService.getUsername() === user.username && <div className='text-center'>
                             <BigInfoButton title='Готово' onClick={() => completeTask(id)}/>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
