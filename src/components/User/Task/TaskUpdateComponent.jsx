@@ -19,7 +19,7 @@ export const TaskUpdateComponent = () => {
 
     useEffect(() => {
         TaskService.getTask(id).then(response => {
-            setTitle(response.data.title);
+            setTitle(response.data.task.title);
             setUserId(response.data.user.id);
             setOrderId(response.data.order.id);
         }).catch(errors => console.error(errors))

@@ -33,20 +33,21 @@ const TaskViewComponent = () => {
     useEffect(() => {
         TaskService.getTask(id)
             .then((response) => {
+                console.log(response.data);
                 setBook(response.data.order.book)
                 setUser(response.data.user)
                 setCustomer(response.data.order.customer)
-                setTitle(response.data.title);
-                setStatus(response.data.status);
-                setCreatedAt(response.data.createdAt)
-                setUpdatedAt(response.data.updatedAt)
-                setFinishedAt(response.data.finishedAt)
-                setOrderStatus(response.data.order.status)
-                setNumber(response.data.order.number)
-                setDeadline(response.data.order.deadline)
-                setOrderCreatedAt(response.data.order.createdAt)
-                setOrderUpdatedAt(response.data.order.updatedAt)
-                setOrderFinishedAt(response.data.order.finishedAt)
+                setTitle(response.data.task.title);
+                setStatus(response.data.task.status);
+                setCreatedAt(response.data.task.createdAt)
+                setUpdatedAt(response.data.task.updatedAt)
+                setFinishedAt(response.data.task.finishedAt)
+                setOrderStatus(response.data.order.order.status)
+                setNumber(response.data.order.order.number)
+                setDeadline(response.data.order.order.deadline)
+                setOrderCreatedAt(response.data.order.order.createdAt)
+                setOrderUpdatedAt(response.data.order.order.updatedAt)
+                setOrderFinishedAt(response.data.order.order.finishedAt)
             })
             .catch()
     }, [id]);

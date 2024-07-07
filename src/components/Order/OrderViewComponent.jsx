@@ -34,17 +34,17 @@ const OrderViewComponent = () => {
 
     useEffect(() => {
         OrderService.getOrder(id).then(response => {
-            setOrderId(response.data.id);
-            setNumber(response.data.number);
-            setDeadline(response.data.deadline);
-            setComment(response.data.comment);
-            setStatus(response.data.status);
-            setCreatedAt(response.data.createdAt);
-            setUpdatedAt(response.data.updatedAt);
-            setFinishedAt(response.data.finishedAt);
+            setOrderId(response.data.order.order.id);
+            setNumber(response.data.order.order.number);
+            setDeadline(response.data.order.order.deadline);
+            setComment(response.data.order.order.comment);
+            setStatus(response.data.order.order.status);
+            setCreatedAt(response.data.order.order.createdAt);
+            setUpdatedAt(response.data.order.order.updatedAt);
+            setFinishedAt(response.data.order.order.finishedAt);
 
-            setCustomer(response.data.customer);
-            setBook(response.data.book);
+            setCustomer(response.data.order.customer);
+            setBook(response.data.order.book);
 
             setTasks(response.data.tasks.length === 0 ? [] : response.data.tasks);
 
@@ -71,7 +71,9 @@ const OrderViewComponent = () => {
                                 <div className="col-md-6 mx-auto">
                                     <div className='content container'>
                                         <div><span className={'fw-medium'}>Статус: </span>{status}</div>
-                                        <div><span className={'fw-medium'}>Сроки: </span>{deadline}</div>
+                                        <div><span className={'fw-medium'}>Сроки: </span>
+                                            {deadline ? new Date(deadline).toLocaleDateString('ru-RU') : '-'}
+                                        </div>
                                         <div><span className={'fw-medium'}>Комментарии: </span>{comment}</div>
                                     </div>
                                 </div>
@@ -117,7 +119,7 @@ const OrderViewComponent = () => {
                             <div className='content container'>
                                 <h3 className='text-center m-3'>Задачи</h3>
                                 {UserService.isAdmin() && <LiteButton title="Добавить задачу" onClick={() => addNewTask(orderId)}/>}
-                                <table className='table table-dark table-striped table-bordered text-center align-middle'>
+                                {tasks.length > 0 && <table className='table table-dark table-striped table-bordered text-center align-middle'>
                                     <thead>
                                     <tr>
                                         <th>Id</th>
@@ -134,28 +136,28 @@ const OrderViewComponent = () => {
                                     <tbody>
                                     {
                                         Array.isArray(tasks) ? tasks.map(task =>
-                                            <tr key={task.id}>
-                                                <td>{task.id}</td>
-                                                <td>{task.title}</td>
+                                            <tr key={task.task.id}>
+                                                <td>{task.task.id}</td>
+                                                <td>{task.task.title}</td>
                                                 <td>{task.username}</td>
-                                                <td>{task.status}</td>
-                                                <td>{task.createdAt ? new Date(task.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
-                                                <td>{task.updatedAt ? new Date(task.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
-                                                <td>{task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('ru-RU') : '-'}</td>
+                                                <td>{task.task.status}</td>
+                                                <td>{task.task.createdAt ? new Date(task.task.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
+                                                <td>{task.task.updatedAt ? new Date(task.task.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
+                                                <td>{task.task.finishedAt ? new Date(task.task.finishedAt).toLocaleDateString('ru-RU') : '-'}</td>
                                                 <td>
                                                     <SmallLiteButton title="Подробнее"
-                                                                     onClick={() => viewTask(task.id)}/>
+                                                                     onClick={() => viewTask(task.task.id)}/>
                                                 </td>
                                                 {UserService.isAdmin() && <td>
                                                     <SmallInfoButton title="Изменить"
-                                                                     onClick={() => updateTask(task.id)}/>
+                                                                     onClick={() => updateTask(task.task.id)}/>
                                                 </td>}
 
                                             </tr>
                                         ) : null
                                     }
                                     </tbody>
-                                </table>
+                                </table>}
                             </div>
                         </div>
                     </div>

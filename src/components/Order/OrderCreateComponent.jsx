@@ -72,6 +72,8 @@ const OrderCreateComponent = () => {
                 }
             };
             console.error(order);
+
+
             OrderService.createOrder(order)
                 .then(result => {
                     console.log(result);
@@ -253,9 +255,8 @@ const OrderCreateComponent = () => {
 
                                         <div className="form-group mb-2">
                                             <label className='form-label'>Сроки</label>
-                                            <input type="text"
+                                            <input type="datetime-local"
                                                    placeholder='Сроки заказа'
-                                                   name='deadline'
                                                    value={deadline}
                                                    className='form-control'
                                                    onChange={(e) => setDeadline(e.target.value)}

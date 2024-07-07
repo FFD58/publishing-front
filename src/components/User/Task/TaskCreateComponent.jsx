@@ -24,7 +24,6 @@ const TaskCreateComponent = () => {
 
     const getAllUsers = () => {
         UserService.listUsers().then((response) => {
-            console.log(response.data);
             setUsers(response.data.length === 0 ? [] : response.data)
         }).catch(error => {
             console.error(error);
@@ -36,8 +35,6 @@ const TaskCreateComponent = () => {
 
         if (validateForm()) {
             const task = {title, userId, orderId: id};
-            console.log(task)
-
             TaskService.createTask(task)
                 .then(response => {
                     console.log(response.data);
@@ -75,7 +72,6 @@ const TaskCreateComponent = () => {
                                     <label className='form-label'>Название</label>
                                     <input type="text"
                                            placeholder='Введите название'
-                                           name='title'
                                            value={title}
                                            className={`text-center form-control ${errors.title ? 'is-invalid' : ''}`}
                                            onChange={(e) => setTitle(e.target.value)}

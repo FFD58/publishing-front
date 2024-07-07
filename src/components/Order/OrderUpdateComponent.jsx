@@ -13,6 +13,7 @@ const OrderUpdateComponent = () => {
     const [bookFormats, setBookFormats] = useState([]);
 
     const [number, setNumber] = useState("");
+    const [status, setStatus] = useState("");
     const [deadline, setDeadline] = useState("");
     const [comment, setComment] = useState("");
     const [createdAt, setCreatedAt] = useState("");
@@ -59,17 +60,19 @@ const OrderUpdateComponent = () => {
         getAllBookTypes();
         getAllBookFormats();
         OrderService.getOrder(id).then(response => {
-            setNumber(response.data.number);
-            setDeadline(response.data.deadline);
-            setComment(response.data.comment);
-            setCreatedAt(response.data.createdAt);
-            setUpdatedAt(response.data.updatedAt);
-            setFinishedAt(response.data.finishedAt);
-            setName(response.data.customer.name);
-            setEmail(response.data.customer.email);
-            setPhone(response.data.customer.phone);
-            setTitle(response.data.book.title);
-            setAuthors(response.data.book.authors);
+            console.log(response.data);
+            setNumber(response.data.order.order.number);
+            setStatus(response.data.order.order.status);
+            setDeadline(response.data.order.order.deadline);
+            setComment(response.data.order.order.comment);
+            setCreatedAt(response.data.order.order.createdAt);
+            setUpdatedAt(response.data.order.order.updatedAt);
+            setFinishedAt(response.data.order.order.finishedAt);
+            setName(response.data.order.customer.name);
+            setEmail(response.data.order.customer.email);
+            setPhone(response.data.order.customer.phone);
+            setTitle(response.data.order.book.title);
+            setAuthors(response.data.order.book.authors);
             setTasks(response.data.tasks.length === 0 ? [] : response.data.tasks);
         }).catch(errors => console.error(errors))
     }, [id]);
@@ -135,7 +138,7 @@ const OrderUpdateComponent = () => {
                                                 </tr>
                                                 <tr>
                                                     <td><span className={'fw-medium'}>Сроки:</span></td>
-                                                    <td><input type="text" name='deadline'
+                                                    <td><input type="datetime-local" name='deadline'
                                                                value={deadline}
                                                                className='form-control'
                                                                onChange={(e) => setDeadline(e.target.value)}
@@ -275,16 +278,16 @@ const OrderUpdateComponent = () => {
                                         <tbody>
                                         {
                                             Array.isArray(tasks) ? tasks.map(task =>
-                                                <tr key={task.id}>
-                                                    <td>{task.id}</td>
-                                                    <td>{task.title}</td>
+                                                <tr key={task.task.id}>
+                                                    <td>{task.task.id}</td>
+                                                    <td>{task.task.title}</td>
                                                     <td>{task.username}</td>
-                                                    <td>{task.status}</td>
-                                                    <td>{task.createdAt ? new Date(task.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
-                                                    <td>{task.updatedAt ? new Date(task.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
-                                                    <td>{task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('ru-RU') : '-'}</td>
+                                                    <td>{task.task.status}</td>
+                                                    <td>{task.task.createdAt ? new Date(task.task.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
+                                                    <td>{task.task.updatedAt ? new Date(task.task.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
+                                                    <td>{task.task.finishedAt ? new Date(task.task.finishedAt).toLocaleDateString('ru-RU') : '-'}</td>
                                                     <td className='text-center'>
-                                                        <SmallInfoButton title="Изменить" onClick={() => updateTask(task.id)}/>
+                                                        <SmallInfoButton title="Изменить" onClick={() => updateTask(task.task.id)}/>
                                                     </td>
                                                 </tr>
                                             ) : null

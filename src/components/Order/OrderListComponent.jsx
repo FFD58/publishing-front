@@ -66,25 +66,25 @@ const OrderListComponent = () => {
                 <tbody>
                 {
                     orders.map(order =>
-                        <tr key={order.id}>
-                            <td>{order.id}</td>
-                            <td>{order.number}</td>
+                        <tr key={order.order.id}>
+                            <td>{order.order.id}</td>
+                            <td>{order.order.number}</td>
                             <td>{order.book.title}</td>
                             <td>{order.book.authors}</td>
                             <td>{order.book.format}</td>
                             <td>{order.book.type}</td>
                             <td>{order.customer.name}</td>
-                            <td>{order.status}</td>
-                            <td>{order.createdAt ? new Date(order.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
-                            <td>{order.updatedAt ? new Date(order.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
+                            <td>{order.order.status}</td>
+                            <td>{order.order.createdAt ? new Date(order.order.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
+                            <td>{order.order.updatedAt ? new Date(order.order.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
                             <td className='text-center'>
-                                <SmallLiteButton title="Подробнее" onClick={() => viewOrder(order.id)}/>
+                                <SmallLiteButton title="Подробнее" onClick={() => viewOrder(order.order.id)}/>
                             </td>
                             {UserService.isAdmin() && <td className='text-center'>
-                                <SmallInfoButton title="Изменить" onClick={() => updateOrder(order.id)}/>
+                                <SmallInfoButton title="Изменить" onClick={() => updateOrder(order.order.id)}/>
                             </td>}
                             {UserService.isAdmin() && <td className='text-center'>
-                                <SmallDangerButton title="Удалить" onClick={() => removeOrder(order.id)}/>
+                                <SmallDangerButton title="Удалить" onClick={() => removeOrder(order.order.id)}/>
                             </td>}
                         </tr>
                     )

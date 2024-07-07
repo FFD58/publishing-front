@@ -18,6 +18,7 @@ const TaskListComponent = () => {
 
     const getAllTasks = () => {
         TaskService.listTasks().then((response) => {
+            console.log(response.data);
             setTasks(response.data.length === 0 ? [] : response.data);
         }).catch(error => {
             console.error(error);
@@ -61,23 +62,23 @@ const TaskListComponent = () => {
                 <tbody>
                 {
                     tasks.map(task =>
-                        <tr key={task.id}>
-                            <td>{task.id}</td>
-                            <td>{task.title}</td>
+                        <tr key={task.task.id}>
+                            <td>{task.task.id}</td>
+                            <td>{task.task.title}</td>
                             <td>{task.username}</td>
                             <td>{task.orderNumber}</td>
-                            <td>{task.status}</td>
-                            <td>{task.createdAt ? new Date(task.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
-                            <td>{task.updatedAt ? new Date(task.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
-                            <td>{task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('ru-RU') : '-'}</td>
+                            <td>{task.task.status}</td>
+                            <td>{task.task.createdAt ? new Date(task.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
+                            <td>{task.task.updatedAt ? new Date(task.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
+                            <td>{task.task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('ru-RU') : '-'}</td>
                             <td>
-                                <SmallLiteButton title="Подробнее" onClick={() => viewTask(task.id)}/>
+                                <SmallLiteButton title="Подробнее" onClick={() => viewTask(task.task.id)}/>
                             </td>
                             {UserService.isAdmin() && <td>
-                                <SmallInfoButton title="Изменить" onClick={() => updateTask(task.id)}/>
+                                <SmallInfoButton title="Изменить" onClick={() => updateTask(task.task.id)}/>
                             </td>}
                             {UserService.isAdmin() && <td>
-                                <SmallDangerButton title="Удалить" onClick={() => removeTask(task.id)}/>
+                                <SmallDangerButton title="Удалить" onClick={() => removeTask(task.task.id)}/>
                             </td>}
                         </tr>
                     )

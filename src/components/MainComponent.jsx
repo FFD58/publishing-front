@@ -25,7 +25,7 @@ const MainComponent = () => {
 
     return (
         <div className='content'>
-            <Expire delay={3000}>
+            <Expire delay={1000}>
                 {UserService.isAuthenticated() &&
                     <h4 className='expire-div text-center mt-5'>Привет, {UserService.getUsername()}!</h4>}
             </Expire>
@@ -50,16 +50,16 @@ const MainComponent = () => {
                     <tbody>
                     {
                         tasks.map(task =>
-                            <tr key={task.id}>
-                                <td>{task.id}</td>
-                                <td>{task.title}</td>
+                            <tr key={task.task.id}>
+                                <td>{task.task.id}</td>
+                                <td>{task.task.title}</td>
                                 <td>{task.orderNumber}</td>
-                                <td>{task.status}</td>
-                                <td>{task.createdAt ? new Date(task.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
-                                <td>{task.updatedAt ? new Date(task.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
-                                <td>{task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('ru-RU') : '-'}</td>
+                                <td>{task.task.status}</td>
+                                <td>{task.task.createdAt ? new Date(task.task.createdAt).toLocaleDateString('ru-RU') : '-'}</td>
+                                <td>{task.task.updatedAt ? new Date(task.task.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
+                                <td>{task.task.finishedAt ? new Date(task.task.finishedAt).toLocaleDateString('ru-RU') : '-'}</td>
                                 <td>
-                                    <SmallLiteButton title="Подробнее" onClick={() => viewTask(task.id)}/>
+                                    <SmallLiteButton title="Подробнее" onClick={() => viewTask(task.task.id)}/>
                                 </td>
                             </tr>
                         )
