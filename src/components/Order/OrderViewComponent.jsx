@@ -114,7 +114,6 @@ const OrderViewComponent = () => {
                                     </div>
                                 </div>
                             </div>
-
                             {/*Задачи*/}
                             <div className='content container'>
                                 <h3 className='text-center m-3'>Задачи</h3>

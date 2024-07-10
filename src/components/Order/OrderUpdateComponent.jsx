@@ -5,13 +5,16 @@ import BookTypeService from "../../services/BookTypeService.js";
 import BookFormatService from "../../services/BookFormatService.js";
 import BigInfoButton from "../UI/buttons/BigInfoButton.jsx";
 import SmallInfoButton from "../UI/buttons/SmallInfoButton.jsx";
+import InfoButton from "../UI/buttons/InfoButton.jsx";
 import LiteButton from "../UI/buttons/LiteButton.jsx";
+import UploadFilesService from "../../services/UploadFilesService.js";
 
 const OrderUpdateComponent = () => {
 
     const [bookTypes, setBookTypes] = useState([]);
     const [bookFormats, setBookFormats] = useState([]);
 
+    const [orderId, setOrderId] = useState("");
     const [number, setNumber] = useState("");
     const [status, setStatus] = useState("");
     const [deadline, setDeadline] = useState("");
@@ -22,7 +25,6 @@ const OrderUpdateComponent = () => {
 
     const [title, setTitle] = useState("");
     const [authors, setAuthors] = useState("");
-    const [files, setFiles] = useState("");
     const [typeId, setTypeId] = useState("");
     const [formatId, setFormatId] = useState("");
 
@@ -31,6 +33,9 @@ const OrderUpdateComponent = () => {
     const [phone, setPhone] = useState("");
 
     const [tasks, setTasks] = useState("");
+
+    const [selectedFile, setSelectedFile] = useState('');
+    const [message, setMessage] = useState('');
 
     const {id} = useParams();
 
@@ -61,6 +66,7 @@ const OrderUpdateComponent = () => {
         getAllBookFormats();
         OrderService.getOrder(id).then(response => {
             console.log(response.data);
+            setOrderId(response.data.order.order.id);
             setNumber(response.data.order.order.number);
             setStatus(response.data.order.order.status);
             setDeadline(response.data.order.order.deadline);
@@ -98,14 +104,20 @@ const OrderUpdateComponent = () => {
 
     }
 
-    const handleFiles = (e) => {
-        const files = e.target.files;
-        const formData = new FormData();
-        for (let i = 0; i < files.length; i++) {
-            let file = files[i];
-            formData.append('file[' + i + ']', file);
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
+
+    const handleFileUpload = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await UploadFilesService.upload(orderId, selectedFile);
+            console.log(orderId);
+            setMessage(response.data);
+        } catch (error) {
+            setMessage('File upload failed!');
         }
-    }
+    };
 
     return (
         <div className='container'>
@@ -256,13 +268,41 @@ const OrderUpdateComponent = () => {
                                         <BigInfoButton title="Изменить данные заказа" onClick={saveOrder}/>
                                     </div>
                                 </div>
+                                {/*Форма загрузки файлов*/}
 
+                                <div className="container">
+                                    <div className="col-md-6 mx-auto">
+                                        <div className="row justify-content-center">
+                                            <div className="card text-white bg-dark">
+                                                <h4 className="text-white text-center mt-3">Загрузка файлов</h4>
+                                                <div className="card-body">
+                                                    {message && <div className="alert alert-info">{message}</div>}
+                                                    <form>
+                                                        <div className="form-group">
+                                                            <input
+                                                                type="file"
+                                                                className="form-control text-white bg-dark"
+                                                                onChange={handleFileChange}
+                                                            />
+                                                        </div>
+                                                        <div className="text-center mt-3">
+                                                            <InfoButton title="Загрузить" onClick={handleFileUpload}/>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/*Конец формы загрузки файлов*/}
 
                                 {/*Задачи*/}
                                 <div className='content container'>
                                     <h3 className='text-center m-3'>Задачи</h3>
                                     <LiteButton title={"Добавить задачу"} onClick={addNewTask}/>
-                                    <table className='table table-dark table-striped table-bordered text-center align-middle'>
+                                    <table
+                                        className='table table-dark table-striped table-bordered text-center align-middle'>
                                         <thead>
                                         <tr>
                                             <th>Id</th>
@@ -287,7 +327,8 @@ const OrderUpdateComponent = () => {
                                                     <td>{task.task.updatedAt ? new Date(task.task.updatedAt).toLocaleDateString('ru-RU') : '-'}</td>
                                                     <td>{task.task.finishedAt ? new Date(task.task.finishedAt).toLocaleDateString('ru-RU') : '-'}</td>
                                                     <td className='text-center'>
-                                                        <SmallInfoButton title="Изменить" onClick={() => updateTask(task.task.id)}/>
+                                                        <SmallInfoButton title="Изменить"
+                                                                         onClick={() => updateTask(task.task.id)}/>
                                                     </td>
                                                 </tr>
                                             ) : null

@@ -1,10 +1,8 @@
 import {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import OrderService from "../../services/OrderService.js";
 import BookTypeService from "../../services/BookTypeService.js";
 import BookFormatService from "../../services/BookFormatService.js";
-import SmallLiteButton from "../UI/buttons/SmallLiteButton.jsx";
-import InfoButton from "../UI/buttons/InfoButton.jsx";
 import BigInfoButton from "../UI/buttons/BigInfoButton.jsx";
 
 const OrderCreateComponent = () => {
@@ -18,16 +16,12 @@ const OrderCreateComponent = () => {
 
     const [title, setTitle] = useState("");
     const [authors, setAuthors] = useState("");
-    const [files, setFiles] = useState("");
     const [typeId, setTypeId] = useState("");
     const [formatId, setFormatId] = useState("");
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-
-    const {id} = useParams();
-
 
     const [errors, setErrors] = useState({
         name: '',
@@ -60,8 +54,8 @@ const OrderCreateComponent = () => {
 
     const saveOrder = (e) => {
         e.preventDefault();
-
         if (validateForm()) {
+
             const order = {
                 number, comment, deadline,
                 book: {
@@ -71,8 +65,6 @@ const OrderCreateComponent = () => {
                     name, email, phone
                 }
             };
-            console.error(order);
-
 
             OrderService.createOrder(order)
                 .then(result => {
@@ -125,15 +117,6 @@ const OrderCreateComponent = () => {
 
         setErrors(errorsCopy);
         return valid;
-    }
-
-    const handleFiles = (e) => {
-        const files = e.target.files;
-        const formData = new FormData();
-        for (let i = 0; i < files.length; i++) {
-            let file = files[i];
-            formData.append('file[' + i + ']', file);
-        }
     }
 
     return (
@@ -191,14 +174,6 @@ const OrderCreateComponent = () => {
                                                     <option value={bookFormat.id}>{bookFormat.title}</option>
                                                 ))}
                                             </select>
-                                        </div>
-
-                                        <div className="form-group mb-2">
-                                            <label className='form-label'>Файлы</label>
-                                            <input type="file" accept="multipart/form-data" multiple
-                                                   className='form-control'
-                                                   onChange={handleFiles}
-                                            />
                                         </div>
 
                                     </div>
